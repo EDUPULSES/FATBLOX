@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FATBLOX57 | Daily Spin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --bg: #05080f; --sidebar: #0b1224; --text: #ffffff; --accent: #00d4ff; --card: #111827; --border: #1f2937; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; transition: 0.3s; }
+        body { background: var(--bg); color: var(--text); display: flex; min-height: 100vh; overflow-x: hidden; }
+        
+        /* BACKGROUND */
+        .cyber-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px), linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px); background-size: 20px 20px; z-index: -1; }
+
+        /* SIDEBAR */
+        nav.sidebar { width: 260px; background: var(--sidebar); height: 100vh; position: fixed; padding: 40px 20px; border-right: 1px solid var(--border); z-index: 1000; display: flex; flex-direction: column; }
+        .logo { font-size: 1.8rem; font-weight: 900; color: var(--accent); margin-bottom: 30px; cursor: pointer; user-select: none; }
+        .nav-link { text-decoration: none; color: var(--text); padding: 12px 15px; margin-bottom: 8px; border-radius: 12px; display: flex; align-items: center; gap: 10px; font-weight: 600; opacity: 0.8; }
+        .nav-link.active { background: var(--accent); color: white; opacity: 1; }
+        
+        /* MAIN */
+        main { margin-left: 260px; padding: 40px; width: 100%; display: flex; flex-direction: column; align-items: center; }
+        
+        /* GACHA BOX */
+        .gacha-container { width: 100%; max-width: 700px; background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 20px; margin-top: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+        .window { position: relative; height: 160px; background: #000; border: 4px solid #334155; border-radius: 15px; overflow: hidden; display: flex; align-items: center; }
+        .line { position: absolute; left: 50%; transform: translateX(-50%); height: 100%; width: 4px; background: #fff; z-index: 10; box-shadow: 0 0 10px #fff; }
+        .track { display: flex; position: absolute; left: 0; transition: transform 7s cubic-bezier(0.1, 0, 0, 1); }
+        
+        .item { width: 140px; height: 140px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 1px solid rgba(255,255,255,0.1); position: relative; }
+        .item img { width: 70px; height: 70px; object-fit: contain; margin-bottom: 10px; }
+        .item b { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* RARITY COLORS */
+        .common { background: linear-gradient(to bottom, #9ca3af, #4b5563); color: white; }
+        .uncommon { background: linear-gradient(to bottom, #60a5fa, #2563eb); color: white; }
+        .rare { background: linear-gradient(to bottom, #c084fc, #7e22ce); color: white; }
+        .legendary { background: linear-gradient(to bottom, #f472b6, #db2777); color: white; }
+        .mythic { background: linear-gradient(to bottom, #ef4444, #991b1b); color: white; }
+        .blank { background: #111; color: #555; }
+
+        .spin-btn { background: var(--accent); color: white; border: none; padding: 15px 50px; font-size: 1.5rem; font-weight: 900; border-radius: 12px; margin-top: 20px; width: 100%; max-width: 300px; cursor: pointer; }
+        .spin-btn:disabled { opacity: 0.5; cursor: not-allowed; background: #334155; }
+
+        input { padding: 15px; width: 100%; max-width: 400px; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 10px; margin-bottom: 20px; text-align: center; font-size: 1.1rem; }
+
+        /* ADMIN PANEL */
+        #adminPanel { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 350px; background: #0b1224; border: 2px solid var(--accent); padding: 25px; border-radius: 15px; z-index: 5000; display: none; box-shadow: 0 0 100px #000; }
+    </style>
+</head>
+<body>
+    <div class="cyber-bg"></div>
+    <nav class="sidebar">
+        <div class="logo" id="trigger1">FATBLOX57</div>
+        <!-- <a href="#" class="nav-link active"><i class="fas fa-dice"></i> Daily Spin</a> -->
+        <a href="index.html" class="nav-link "><i class="fas fa-home"></i> Home</a>
+        <a href="quiz.html" class="nav-link"><i class="fas fa-check-circle"></i> Verification</a>
+        <a href="giveaway.html" class="nav-link"><i class="fas fa-gift"></i> Giveaway</a>
+        <a href="spin.html" class="nav-link" active><i class="fas fa-dice"></i> Daily Spin</a>
+        <a href="leaderboard.html" class="nav-link"><i class="fas fa-trophy"></i> Leaderboard</a>
+        <div id="trigger2" style="margin-top:auto; padding:20px; opacity:0.5; cursor:pointer;"><i class="fas fa-user-circle" style="font-size: 1.8rem;"></i></div>
+    </nav>
+
+    <main>
+        <h1 style="font-size: 2.5rem; text-align: center;">Daily Fruit Gacha</h1>
+        
+        <div id="cooldownText" style="display: none; background: rgba(239,68,68,0.1); border: 1px solid #ef4444; color: #ef4444; padding: 15px; border-radius: 10px; margin-bottom: 20px; font-weight: bold;">
+            <i class="fas fa-clock"></i> COOLDOWN ACTIVE: Come back in 24 Hours!
+        </div>
+
+        <input type="text" id="userSpin" placeholder="Enter Roblox Username">
+
+        <div class="gacha-container">
+            <div class="window">
+                <div class="line"></div>
+                <div class="track" id="track"></div>
+            </div>
+        </div>
+
+        <button class="spin-btn" id="btnSpin" onclick="spin()">SPIN</button>
+        <h2 id="result" style="margin-top: 20px; min-height: 40px; color: var(--accent);"></h2>
+    </main>
+
+    <div id="adminPanel">
+        <h3 style="color: var(--accent); text-align: center; margin-bottom: 15px;">ADMIN PANEL</h3>
+        <button class="spin-btn" style="background: #2ed573; font-size: 1rem; width:100%; margin-bottom:10px;" onclick="localStorage.removeItem('lastSpin'); location.reload();">Reset My Cooldown</button>
+        
+        <label>Force Next Spin:</label>
+        <select id="rigNext" style="width: 100%; padding: 10px; background: #000; color: white; border: 1px solid #333; margin-bottom:15px;">
+            <option value="">Random</option>
+            <option value="Kitsune">Force Kitsune</option>
+            <option value="Leopard">Force Leopard</option>
+            <option value="Dough">Force Dough</option>
+            <option value="BLANK">Force BLANK</option>
+        </select>
+        
+        <button class="spin-btn" style="background: #ff4757; font-size: 1rem; width:100%;" onclick="document.getElementById('adminPanel').style.display='none'">Close</button>
+    </div>
+
+    <script>
+        // FULL FRUIT LIST (Grouped for Logic)
+        const common = [
+            { name: "Rocket", type: "common", icon: "🚀" }, { name: "Spin", type: "common", icon: "🌪️" },
+            { name: "Chop", type: "common", icon: "🔪" }, { name: "Spring", type: "common", icon: "🌀" },
+            { name: "Bomb", type: "common", icon: "💣" }, { name: "Smoke", type: "common", icon: "💨" },
+            { name: "Spike", type: "common", icon: "📌" }, { name: "Flame", type: "common", icon: "🔥" },
+            { name: "Falcon", type: "common", icon: "🦅" }, { name: "Ice", type: "common", icon: "❄️" },
+            { name: "Sand", type: "common", icon: "🏜️" }
+        ];
+        const uncommon = [
+            { name: "Dark", type: "uncommon", icon: "🌑" }, { name: "Diamond", type: "uncommon", icon: "💎" },
+            { name: "Light", type: "uncommon", icon: "💡" }, { name: "Rubber", type: "uncommon", icon: "🎈" },
+            { name: "Barrier", type: "uncommon", icon: "🚧" }, { name: "Ghost", type: "uncommon", icon: "👻" },
+            { name: "Magma", type: "uncommon", icon: "🌋" }
+        ];
+        const rare = [
+            { name: "Quake", type: "rare", icon: "🌊" }, { name: "Buddha", type: "legendary", icon: "🙏" },
+            { name: "Love", type: "legendary", icon: "❤️" }, { name: "Spider", type: "legendary", icon: "🕸️" },
+            { name: "Sound", type: "legendary", icon: "🎵" }, { name: "Phoenix", type: "legendary", icon: "🐦" },
+            { name: "Portal", type: "legendary", icon: "🌀" }, { name: "Rumble", type: "legendary", icon: "⚡" },
+            { name: "Pain", type: "legendary", icon: "🤕" }, { name: "Blizzard", type: "legendary", icon: "🌨️" }
+        ];
+        const mythic = [
+            { name: "Gravity", type: "mythic", icon: "🪐" }, { name: "Mammoth", type: "mythic", icon: "🐘" },
+            { name: "T-Rex", type: "mythic", icon: "🦖" }, { name: "Dough", type: "mythic", icon: "🍩" },
+            { name: "Shadow", type: "mythic", icon: "👤" }, { name: "Venom", type: "mythic", icon: "☠️" },
+            { name: "Control", type: "mythic", icon: "🎮" }, { name: "Spirit", type: "mythic", icon: "👻" },
+            { name: "Leopard", type: "mythic", icon: "🐆" }
+        ];
+        
+        // SPECIAL ITEMS
+        const kitsune = { name: "Kitsune", type: "mythic", icon: "🦊" };
+        const blank = { name: "BLANK", type: "blank", icon: "❌" };
+
+        // Combine for animation only
+        const allFruits = [...common, ...uncommon, ...rare, ...mythic, kitsune, blank];
+
+        // --- ADMIN TRIGGER ---
+        let clicks1 = 0, clicks2 = 0, unlocked = false;
+        document.getElementById('trigger1').addEventListener('click', () => {
+            clicks1++; if(clicks1 === 3) { unlocked = true; clicks1 = 0; } setTimeout(() => { if(!unlocked) clicks1 = 0; }, 2000);
+        });
+        document.getElementById('trigger2').addEventListener('click', () => {
+            if(!unlocked) return;
+            clicks2++; if(clicks2 === 3) { document.getElementById('adminPanel').style.display = 'block'; clicks2 = 0; unlocked = false; }
+        });
+
+        function init() {
+            const last = localStorage.getItem('lastSpin');
+            if(last && (Date.now() - last) < 86400000) {
+                document.getElementById('btnSpin').disabled = true;
+                document.getElementById('cooldownText').style.display = 'block';
+                document.getElementById('result').innerText = "Cooldown Active";
+            }
+
+            // Populate Track with random fruits for visual
+            const track = document.getElementById('track');
+            track.innerHTML = "";
+            for(let i=0; i<80; i++) {
+                let f = allFruits[Math.floor(Math.random()*allFruits.length)];
+                let div = document.createElement('div');
+                div.className = `item ${f.type}`;
+                div.innerHTML = `<span style="font-size:3rem">${f.icon}</span><br><b>${f.name}</b>`;
+                track.appendChild(div);
+            }
+        }
+
+        function spin() {
+            let u = document.getElementById('userSpin').value;
+            if(!u) return alert("Enter Username!");
+            document.getElementById('btnSpin').disabled = true;
+
+            const rig = document.getElementById('rigNext').value;
+            let win;
+
+            if(rig) {
+                // FORCE WIN
+                if(rig === "BLANK") win = blank;
+                else if(rig === "Kitsune") win = kitsune;
+                else win = allFruits.find(f => f.name === rig) || common[0];
+            } else {
+                // --- ODDS LOGIC ---
+                let r = Math.random(); 
+
+                if (r < 0.50) { 
+                    win = blank; // 50% Blank
+                } else if (r >= 0.50 && r < 0.50001) { 
+                    win = kitsune; // 0.001% Kitsune
+                } else {
+                    // ~49.999% Other Fruits (Weighted)
+                    let subR = Math.random();
+                    if(subR < 0.6) win = common[Math.floor(Math.random()*common.length)]; // 60% of the remaining is Common
+                    else if(subR < 0.85) win = uncommon[Math.floor(Math.random()*uncommon.length)];
+                    else if(subR < 0.95) win = rare[Math.floor(Math.random()*rare.length)];
+                    else win = mythic[Math.floor(Math.random()*mythic.length)];
+                }
+            }
+
+            // Set Visuals
+            let items = document.querySelectorAll('.item');
+            items[50].className = `item ${win.type}`;
+            items[50].innerHTML = `<span style="font-size:3rem">${win.icon}</span><br><b>${win.name}</b>`;
+
+            // Animate
+            let move = -((50 * 140) + 70 - (document.querySelector('.window').offsetWidth / 2));
+            document.getElementById('track').style.transform = `translateX(${move}px)`;
+
+            // Finish
+            setTimeout(() => {
+                document.getElementById('result').innerText = win.name === "BLANK" ? "Unlucky! You got BLANK." : `YOU WON: ${win.name}`;
+                localStorage.setItem('lastSpin', Date.now());
+                saveData(u, win.name);
+                document.getElementById('cooldownText').style.display = 'block';
+            }, 7100);
+        }
+
+        async function saveData(u, r) {
+            try {
+                await fetch('http://localhost:3000/api/spin', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+                    body: JSON.stringify({ data: [{ "Username": u, "fruit roll": r }] })
+                });
+            } catch (err) { console.error("Cloud Error", err); }
+        }
+        window.onload = init;
+    </script>
+</body>
+</html>

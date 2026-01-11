@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #05080f; --accent: #00d4ff; --error: #ff4444; }
+        body { 
+            background: var(--bg); color: white; font-family: 'Outfit'; 
+            height: 100vh; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; text-align: center;
+            overflow: hidden;
+        }
+        
+        /*Error Styling */
+        h1 { font-size: 8rem; margin: 0; color: var(--error); opacity: 0.2; }
+        p { font-size: 1.2rem; opacity: 0.5; max-width: 400px; line-height: 1.6; }
+        .home-btn { 
+            margin-top: 30px; color: var(--accent); text-decoration: none; 
+            border: 1px solid var(--accent); padding: 12px 25px; border-radius: 8px; 
+            font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .home-btn:hover { background: var(--accent); color: #000; }
+
+    
+    </style>
+</head>
+<body>
+
+    <h1>404</h1>
+    <p>The requested URL was not found on this server. That’s all we know.</p>
+    <a href="index.html" class="home-btn">Return to Safety</a>
+</body>
+</html>

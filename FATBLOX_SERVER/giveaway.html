@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FATBLOX57 | Giveaway Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --bg: #f4f7fe; --sidebar: #0b1224; --text: #ffffff; --accent: #00d4ff; --border: #1f2937; --red: #e11d48; }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; transition: 0.3s; }
+        body { display: flex; background: var(--bg); min-height: 100vh; }
+
+        /* STANDARDIZED SIDEBAR */
+        nav.sidebar { 
+            width: 260px; background: var(--sidebar); height: 100vh; 
+            position: fixed; padding: 40px 20px; border-right: 1px solid var(--border);
+            z-index: 1000; display: flex; flex-direction: column;
+        }
+        .logo { font-size: 1.8rem; font-weight: 900; color: var(--accent); margin-bottom: 30px; letter-spacing: 1px; }
+        .nav-link { 
+            text-decoration: none; color: var(--text); padding: 12px 15px; 
+            margin-bottom: 8px; border-radius: 12px; display: flex; align-items: center; gap: 10px; font-weight: 600; opacity: 0.8;
+        }
+        .nav-link:hover, .nav-link.active { background: var(--accent); color: white; opacity: 1; }
+
+        /* FIXED MARGIN 260px */
+        main { margin-left: 260px; padding: 50px; width: 100%; }
+        
+        .card { background: white; padding: 40px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); max-width: 600px; border-left: 10px solid var(--red); }
+        label { font-weight: 600; display: block; margin-top: 15px; color: #333; }
+        input, select { width: 100%; padding: 12px; margin-top: 8px; border: 1px solid #ddd; border-radius: 10px; }
+        #vaultSection { margin-top: 15px; padding: 15px; background: #fff1f2; border-radius: 10px; display: none; border: 1px dashed var(--red); }
+        button { background: var(--red); color: white; padding: 15px; border: none; border-radius: 12px; width: 100%; cursor: pointer; font-weight: bold; margin-top: 25px; }
+    </style>
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="logo">FATBLOX57</div>
+        <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+        <a href="quiz.html" class="nav-link"><i class="fas fa-check-circle"></i> Verification</a>
+        <a href="giveaway.html" class="nav-link active"><i class="fas fa-gift"></i> Giveaway</a>
+        <a href="spin.html" class="nav-link"><i class="fas fa-dice"></i> Daily Spin</a>
+        <a href="leaderboard.html" class="nav-link"><i class="fas fa-trophy"></i> Leaderboard</a>
+    </nav>
+    <main>
+        <h1 style="color: var(--red); margin-bottom: 20px;">🎁 Giveaway Portal</h1>
+        <div class="card">
+            <form id="giveawayForm">
+                <label>Roblox Username</label><input type="text" id="g_user" required>
+                <label>Age</label><input type="number" id="g_age" required>
+                <label>Use Secret Vault Code?</label>
+                <select id="hasCode" onchange="document.getElementById('vaultSection').style.display = this.value === 'yes' ? 'block' : 'none'">
+                    <option value="no">No</option>
+                    <option value="yes">Yes</option>
+                </select>
+                <div id="vaultSection">
+                    <label>Enter Secret Code</label><input type="text" id="secret">
+                </div>
+                <button type="submit" id="gBtn">SUBMIT ENTRY 🚀</button>
+            </form>
+        </div>
+    </main>
+    <script>
+        // REPLACE THE SCRIPT IN giveaway.html
+document.getElementById('giveawayForm').onsubmit = function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('gBtn');
+    
+    // 1. Show Loading
+    btn.innerHTML = "Syncing... ⏳";
+    btn.disabled = true;
+
+    const now = new Date();
+    const dateTimeString = now.toLocaleDateString() + " " + now.toLocaleTimeString();
+
+    const data = { 
+        Username: document.getElementById('g_user').value, 
+        Age: document.getElementById('g_age').value, 
+        SecretCode: document.getElementById('secret').value || "None",
+        Timestamp: dateTimeString
+    };
+
+    // 2. Send to Backend
+    fetch('http://localhost:3000/api/giveaway', {
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data) // ✅ Fixed: Send simple data
+    })
+    .then(response => {
+        if (!response.ok) throw new Error("Server Error");
+        return response.json();
+    })
+    .then(() => {
+        // 3. Success
+        alert("Entry Received at: " + dateTimeString);
+        this.reset();
+        document.getElementById('vaultSection').style.display = 'none';
+        btn.innerHTML = "SUBMIT ENTRY 🚀"; 
+        btn.disabled = false;
+    })
+    .catch(error => {
+        // 4. IF SERVER IS OFFLINE
+        alert("⚠️ CONNECTION FAILED! \nIs your 'server.js' black window open?");
+        console.error(error);
+        btn.innerHTML = "SUBMIT ENTRY 🚀"; 
+        btn.disabled = false;
+    });
+};
+    </script>
+</body>
+</html>

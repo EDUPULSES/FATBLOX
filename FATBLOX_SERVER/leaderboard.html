@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FATBLOX57 | Elite Leaderboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* UPDATED COLORS TO MATCH HOME */
+        :root { --bg: #05080f; --sidebar: #0b1224; --text: #ffffff; --accent: #00d4ff; --card: #111827; --border: #1f2937; --gold: #ffcc00; }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; transition: 0.3s; }
+        body { background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
+
+        /* STANDARDIZED SIDEBAR CSS */
+        nav.sidebar { 
+            width: 260px; background: var(--sidebar); height: 100vh; 
+            position: fixed; padding: 40px 20px; border-right: 1px solid var(--border);
+            z-index: 1000; display: flex; flex-direction: column;
+        }
+        .logo { font-size: 1.8rem; font-weight: 900; color: var(--accent); margin-bottom: 30px; letter-spacing: 1px; }
+        .nav-link { 
+            text-decoration: none; color: var(--text); padding: 12px 15px; 
+            margin-bottom: 8px; border-radius: 12px; display: flex; align-items: center; gap: 10px; font-weight: 600; opacity: 0.8;
+        }
+        .nav-link:hover, .nav-link.active { background: var(--accent); color: white; opacity: 1; }
+
+        /* FIXED MAIN MARGIN TO 260PX */
+        main { margin-left: 260px; padding: 60px; width: 100%; display: flex; flex-direction: column; align-items: center; }
+        
+        .leaderboard-container {
+            width: 100%; max-width: 900px; background: var(--card);
+            border-radius: 24px; padding: 40px; border: 1px solid var(--border);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+        }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { text-align: left; padding: 15px; color: #9ca3af; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem; }
+        td { padding: 20px 15px; border-bottom: 1px solid var(--border); font-size: 1.1rem; }
+        
+        .rank-cell { width: 80px; font-weight: 900; font-size: 1.3rem; }
+        .top-1 { color: var(--gold); }
+        .top-2 { color: #e5e7eb; }
+        .top-3 { color: #d97706; }
+
+        .time-val { font-family: 'Courier New', monospace; color: var(--accent); font-weight: bold; }
+        .refresh-btn { background: var(--card); color: white; border: 1px solid var(--border); padding: 12px 25px; border-radius: 10px; cursor: pointer; margin-bottom: 20px; }
+        .refresh-btn:hover { background: var(--accent); border-color: var(--accent); }
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <div class="logo">FATBLOX57</div>
+        <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+        <a href="quiz.html" class="nav-link"><i class="fas fa-check-circle"></i> Verification</a>
+        <a href="giveaway.html" class="nav-link"><i class="fas fa-gift"></i> Giveaway</a>
+        <a href="spin.html" class="nav-link"><i class="fas fa-dice"></i> Daily Spin</a>
+        <a href="leaderboard.html" class="nav-link active"><i class="fas fa-trophy"></i> Leaderboard</a>
+    </nav>
+
+    <main>
+        <h1 style="font-size: 3rem; margin-bottom: 10px;">GLOBAL RANKINGS</h1>
+        <p style="color:#94a3b8; margin-bottom: 30px;">Top players based on total time spent on the portal.</p>
+        
+        <button class="refresh-btn" onclick="loadData()">🔄 UPDATE LIVE DATA</button>
+
+        <div class="leaderboard-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>RANK</th>
+                        <th>PLAYER</th>
+                        <th>TIME INVESTED</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboardBody">
+                    <tr><td colspan="3" style="text-align:center; padding:50px;">Syncing with Cloud Database...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        async function loadData() {
+            const table = document.getElementById('leaderboardBody');
+            try {
+                const response = await fetch('https://sheetdb.io/api/v1/wwicy7zpjd0r4');
+                let users = await response.json();
+                users.sort((a, b) => (parseInt(b.TimeSpent) || 0) - (parseInt(a.TimeSpent) || 0));
+                table.innerHTML = "";
+                users.forEach((user, i) => {
+                    const secs = parseInt(user.TimeSpent) || 0;
+                    const h = Math.floor(secs / 3600);
+                    const m = Math.floor((secs % 3600) / 60);
+                    const s = secs % 60;
+                    const timeStr = `${h}h ${m}m ${s}s`;
+                    const rankClass = i === 0 ? 'top-1' : i === 1 ? 'top-2' : i === 2 ? 'top-3' : '';
+                    table.innerHTML += `<tr><td class="rank-cell ${rankClass}">#${i + 1}</td><td style="font-weight:600;">${user.Username}</td><td class="time-val">${timeStr}</td></tr>`;
+                });
+            } catch (e) { table.innerHTML = "<tr><td colspan='3' style='color:red;'>Database Connection Error</td></tr>"; }
+        }
+        window.onload = loadData;
+    </script>
+</body>
+</html>
