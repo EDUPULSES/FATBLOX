@@ -1,18 +1,26 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FATBLOX57 | Giveaway Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --bg: #f4f7fe; --sidebar: #0b1224; --text: #ffffff; --accent: #00d4ff; --border: #1f2937; --red: #e11d48; }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; transition: 0.3s; }
-        body { display: flex; background: var(--bg); min-height: 100vh; }
+        :root {
+            --bg: #05080f; --sidebar: #0b1224; --text: #ffffff;
+            --accent: #00d4ff; --card: #111827; --border: #1f2937;
+            --red: #e11d48;
+        }
+        [data-theme="light"] {
+            --bg: #f3f4f6; --sidebar: #ffffff; --text: #111827;
+            --accent: #0052cc; --card: #ffffff; --border: #e5e7eb;
+        }
 
-        /* STANDARDIZED SIDEBAR */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; transition: 0.3s; }
+        body { background: var(--bg); color: var(--text); display: flex; min-height: 100vh; overflow-x: hidden; }
+
+        /* --- SIDEBAR --- */
         nav.sidebar { 
             width: 260px; background: var(--sidebar); height: 100vh; 
             position: fixed; padding: 40px 20px; border-right: 1px solid var(--border);
@@ -24,112 +32,150 @@
             margin-bottom: 8px; border-radius: 12px; display: flex; align-items: center; gap: 10px; font-weight: 600; opacity: 0.8;
         }
         .nav-link:hover, .nav-link.active { background: var(--accent); color: white; opacity: 1; }
-
-        /* FIXED MARGIN 260px */
-        main { margin-left: 260px; padding: 50px; width: 100%; }
         
-        .card { background: white; padding: 40px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); max-width: 600px; border-left: 10px solid var(--red); }
-        label { font-weight: 600; display: block; margin-top: 15px; color: #333; }
-        input, select { width: 100%; padding: 12px; margin-top: 8px; border: 1px solid #ddd; border-radius: 10px; }
-        #vaultSection { margin-top: 15px; padding: 15px; background: #fff1f2; border-radius: 10px; display: none; border: 1px dashed var(--red); }
-        button { background: var(--red); color: white; padding: 15px; border: none; border-radius: 12px; width: 100%; cursor: pointer; font-weight: bold; margin-top: 25px; }
-    /* This pushes the icon to the bottom corner */
-nav.sidebar {
-    display: flex;
-    flex-direction: column;
-}
+        .sidebar-footer { margin-top: auto; padding: 20px 0; display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--border); }
+        .theme-toggle { background: var(--border); border: none; padding: 10px; border-radius: 10px; color: var(--text); cursor: pointer; font-size: 1.2rem; flex: 1; }
+        .profile-link { color: var(--text); font-size: 1.8rem; opacity: 0.3; }
 
-.sidebar-footer {
-    margin-top: auto; /* This is the "magic" that pushes it to the bottom */
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start; /* Keeps it in the corner */
-}
+        /* --- CONTENT --- */
+        main { margin-left: 260px; padding: 40px; width: 100%; display: flex; justify-content: center; align-items: center; }
+        
+        .giveaway-card { 
+            max-width: 500px; width: 100%; background: var(--card); 
+            border: 1px solid var(--border); border-radius: 25px; padding: 35px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
 
-.profile-link {
-    color: var(--text);
-    font-size: 1.8rem;
-    opacity: 0.3; /* Low opacity so it looks professional/not sus */
-    text-decoration: none;
-    transition: 0.3s;
-}
+        .header-icon { font-size: 3.5rem; color: var(--accent); margin-bottom: 20px; text-align: center; }
+        h1 { text-align: center; font-size: 2rem; font-weight: 900; margin-bottom: 10px; }
+        p.subtitle { text-align: center; opacity: 0.6; margin-bottom: 30px; font-size: 0.95rem; }
 
-.profile-link:hover {
-    opacity: 1;
-    color: var(--accent);
-}
-    
+        .input-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; opacity: 0.8; }
+        input { 
+            width: 100%; padding: 14px 18px; border-radius: 12px; border: 1px solid var(--border);
+            background: rgba(255,255,255,0.05); color: var(--text); font-size: 1rem; outline: none;
+        }
+        input:focus { border-color: var(--accent); background: rgba(0,212,255,0.05); }
+
+        .submit-btn {
+            width: 100%; background: var(--accent); color: white; border: none; 
+            padding: 16px; border-radius: 12px; font-size: 1rem; font-weight: 900; 
+            cursor: pointer; text-transform: uppercase; margin-top: 10px;
+        }
+        .submit-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+        /* --- MOBILE NAV --- */
+        .menu-btn { display: none; position: fixed; top: 15px; left: 15px; z-index: 1100; background: var(--accent); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; }
+        #overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 999; }
+
+        @media (max-width: 768px) {
+            nav.sidebar { transform: translateX(-100%); width: 280px; }
+            nav.sidebar.open { transform: translateX(0); }
+            main { margin-left: 0; padding: 80px 20px 40px 20px; }
+            .menu-btn { display: block; }
+            #overlay.active { display: block; }
+            .giveaway-card { padding: 25px; }
+        }
     </style>
 </head>
-<body>
-    <<nav class="sidebar">
-    <div class="logo">FATBLOX57</div>
-    
-    <a href="index.html" class="nav-link">Home</a>
-    <a href="quiz.html" class="nav-link">Verification</a>
-    <a href="giveaway.html" class="nav-link">Giveaway</a>
-    <a href="spin.html" class="nav-link">Daily Spin</a>
-    <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+<body data-theme="dark">
 
-    <div class="sidebar-footer">
-        <a href="https://edupulses.github.io/EduPulses/about.html" class="profile-link">
-            <i class="fas fa-user-circle"></i>
-        </a>
-    </div>
-</nav>
-   <main>
-    <div style="background: white; padding: 40px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 100%; max-width: 480px; margin: 40px auto; text-align: center;">
-        <h1 style="color: #0b1224; margin-bottom: 10px; font-weight: 800;">🎁 Giveaway</h1>
-        <p style="color: #64748b; margin-bottom: 30px;">Enter your details to join the active giveaway.</p>
+    <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+    <div id="overlay" onclick="toggleMenu()"></div>
 
-        <form id="gForm" style="text-align: left;">
-            <div style="margin-bottom: 20px;">
-                <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #1e293b;">Roblox Username</label>
-                <input type="text" id="g_user" placeholder="Enter your username" required style="width: 100%; padding: 14px 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 16px; outline: none;">
-            </div>
+    <nav class="sidebar" id="sidebar">
+        <div class="logo">FATBLOX57</div>
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="quiz.html" class="nav-link">Verification</a>
+        <a href="giveaway.html" class="nav-link active">Giveaway</a>
+        <a href="spin.html" class="nav-link">Daily Spin</a>
+        <a href="leaderboard.html" class="nav-link">Leaderboard</a>
 
-            <div style="margin-bottom: 20px;">
-                <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #1e293b;">Secret Code</label>
-                <input type="text" id="secret" placeholder="Optional code" style="width: 100%; padding: 14px 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 16px; outline: none;">
-            </div>
+        <div class="sidebar-footer">
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <span id="themeIcon">🌙</span>
+            </button>
+            <a href="https://edupulses.github.io/EduPulses/about.html" class="profile-link">
+                <i class="fas fa-user-circle"></i>
+            </a>
+        </div>
+    </nav>
 
-            <button type="submit" id="gBtn" style="width: 100%; padding: 16px; background: #0b1224; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 800; cursor: pointer;">ENTER GIVEAWAY</button>
-        </form>
-    </div>
-</main>
+    <main>
+        <div class="giveaway-card">
+            <div class="header-icon"><i class="fas fa-gift"></i></div>
+            <h1>Giveaway Entry</h1>
+            <p class="subtitle">Enter your details below for a chance to win exclusive rewards!</p>
+
+            <form id="gForm">
+                <div class="input-group">
+                    <label>ROBLOX USERNAME</label>
+                    <input type="text" id="g_user" placeholder="Enter your username..." required>
+                </div>
+
+                <div class="input-group">
+                    <label>SECRET CODE (OPTIONAL)</label>
+                    <input type="text" id="secret" placeholder="Enter code from video...">
+                </div>
+
+                <button type="submit" id="gBtn" class="submit-btn">ENTER GIVEAWAY</button>
+            </form>
+        </div>
+    </main>
+
     <script>
-    document.getElementById('gForm').onsubmit = function(e) {
-        e.preventDefault();
-        const btn = document.getElementById('gBtn');
-        
-        btn.innerHTML = "Joining... ⏳";
-        btn.disabled = true;
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('active');
+        }
 
-        const data = { 
-            Type: "GIVEAWAY",
-            Username: document.getElementById('g_user').value, 
-            Detail: "Code: " + (document.getElementById('secret').value || "None")
+        function toggleTheme() {
+            const body = document.body;
+            const newTheme = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
+            document.getElementById('themeIcon').innerText = newTheme === 'dark' ? '🌙' : '☀️';
+            localStorage.setItem('theme', newTheme);
+        }
+
+        window.onload = () => {
+            const saved = localStorage.getItem('theme') || 'dark';
+            document.body.setAttribute('data-theme', saved);
+            document.getElementById('themeIcon').innerText = saved === 'dark' ? '🌙' : '☀️';
         };
 
-        fetch('https://script.google.com/macros/s/AKfycbxC5HR7w6TmgOhshQaiVarWD4Vi62AJRhfQYLal67bnWPBixIOo01agUTVha-g0As39eQ/exec', {
-            method: 'POST', 
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        })
-        .then(() => {
-            alert("Entry Successful! Your name is in the list.");
-            this.reset();
-            btn.innerHTML = "ENTER GIVEAWAY"; 
-            btn.disabled = false;
-        })
-        .catch(error => {
-            alert("Error: Connection failed.");
-            btn.innerHTML = "ENTER GIVEAWAY";
-            btn.disabled = false;
-        });
-    };
-</script>
+        // --- ORIGINAL SCRIPT LOGIC (UNTOUCHED) ---
+        document.getElementById('gForm').onsubmit = function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('gBtn');
+            
+            btn.innerHTML = "Joining... ⏳";
+            btn.disabled = true;
+
+            const data = { 
+                Type: "GIVEAWAY",
+                Username: document.getElementById('g_user').value, 
+                Detail: "Code: " + (document.getElementById('secret').value || "None")
+            };
+
+            fetch('https://script.google.com/macros/s/AKfycbxC5HR7w6TmgOhshQaiVarWD4Vi62AJRhfQYLal67bnWPBixIOo01agUTVha-g0As39eQ/exec', {
+                method: 'POST', 
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(() => {
+                alert("You have successfully entered the giveaway!");
+                this.reset();
+                btn.innerHTML = "ENTER GIVEAWAY";
+                btn.disabled = false;
+            })
+            .catch(() => {
+                alert("Error connecting. Try again later.");
+                btn.innerHTML = "ENTER GIVEAWAY";
+                btn.disabled = false;
+            });
+        };
+    </script>
 </body>
 </html>
