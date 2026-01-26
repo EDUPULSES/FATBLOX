@@ -2,133 +2,168 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>FATBLOX57 | Global Leaderboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Leaderboard | FATBLOX57</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --bg: #05080f; --sidebar: #0b1224; --text: #ffffff; --accent: #00d4ff; --card: #111827; --border: #1f2937; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
-        body { background: var(--bg); color: var(--text); display: flex; min-height: 100vh; overflow-x: hidden; }
-        
-        /* SIDEBAR */
-        nav.sidebar { width: 260px; background: var(--sidebar); height: 100vh; position: fixed; padding: 40px 20px; border-right: 1px solid var(--border); z-index: 1000; }
-        .logo { font-size: 1.8rem; font-weight: 900; color: var(--accent); margin-bottom: 30px; }
-        .nav-link { text-decoration: none; color: var(--text); padding: 12px 15px; margin-bottom: 8px; border-radius: 12px; display: flex; align-items: center; gap: 10px; font-weight: 600; opacity: 0.6; transition: 0.3s; }
-        .nav-link.active { background: var(--accent); color: white; opacity: 1; }
-
-        /* MAIN CONTENT */
-        main { margin-left: 260px; padding: 0; width: calc(100% - 260px); }
-
-        /* CHAMPION HERO SECTION */
-        #heroSection {
-            width: 100%; height: 350px;
-            background: linear-gradient(to bottom, rgba(0, 212, 255, 0.15), var(--bg));
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            border-bottom: 2px solid var(--accent); text-align: center;
+        :root {
+            --bg: #05080f; --sidebar: #0b1224; --text: #ffffff;
+            --accent: #00d4ff; --card: #111827; --border: #1f2937;
         }
-        .crown { font-size: 4rem; color: #ffd700; margin-bottom: 10px; animation: float 3s infinite ease-in-out; }
-        .champ-name { font-size: 3.5rem; font-weight: 900; text-transform: uppercase; letter-spacing: -1px; color: #fff; }
+        [data-theme="light"] {
+            --bg: #f3f4f6; --sidebar: #ffffff; --text: #111827;
+            --accent: #0052cc; --card: #ffffff; --border: #e5e7eb;
+        }
 
-        /* TABLES */
-        .p-40 { padding: 40px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
-        .board-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 30px; min-height: 450px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; transition: 0.3s; }
+        body { background: var(--bg); color: var(--text); display: flex; min-height: 100vh; overflow-x: hidden; }
+
+        /* --- SIDEBAR --- */
+        nav.sidebar { 
+            width: 260px; background: var(--sidebar); height: 100vh; 
+            position: fixed; padding: 40px 20px; border-right: 1px solid var(--border);
+            z-index: 1000; display: flex; flex-direction: column;
+        }
+        .logo { font-size: 1.8rem; font-weight: 900; color: var(--accent); margin-bottom: 30px; letter-spacing: 1px; }
+        .nav-link { 
+            text-decoration: none; color: var(--text); padding: 12px 15px; 
+            margin-bottom: 8px; border-radius: 12px; display: flex; align-items: center; gap: 10px; font-weight: 600; opacity: 0.8;
+        }
+        .nav-link:hover, .nav-link.active { background: var(--accent); color: white; opacity: 1; }
         
-        h2 { color: var(--accent); margin-bottom: 20px; font-size: 1.4rem; display: flex; align-items: center; gap: 10px; }
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; color: #64748b; font-size: 0.75rem; text-transform: uppercase; padding-bottom: 15px; }
-        td { padding: 15px 0; border-bottom: 1px solid #1f2937; font-weight: 600; }
-        .rank { color: var(--accent); font-weight: 900; width: 50px; font-size: 1.1rem; }
+        .sidebar-footer { margin-top: auto; padding: 20px 0; display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--border); }
+        .theme-toggle { background: var(--border); border: none; padding: 10px; border-radius: 10px; color: var(--text); cursor: pointer; font-size: 1.2rem; flex: 1; }
+        .profile-link { color: var(--text); font-size: 1.8rem; opacity: 0.3; text-decoration: none; }
+
+        /* --- CONTENT --- */
+        main { margin-left: 260px; width: 100%; }
+
+        /* HERO SECTION */
+        #heroSection {
+            width: 100%; padding: 60px 20px;
+            background: linear-gradient(to bottom, rgba(0, 212, 255, 0.1), var(--bg));
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border-bottom: 1px solid var(--border); text-align: center;
+        }
+        .crown { font-size: 3.5rem; color: #ffd700; margin-bottom: 10px; animation: float 3s infinite ease-in-out; }
+        .champ-name { font-size: 2.5rem; font-weight: 900; text-transform: uppercase; color: var(--text); }
+        
+        /* TABLES & GRID */
+        .p-40 { padding: 40px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
+        .board-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 25px; min-height: 400px; }
+        
+        h2 { color: var(--accent); margin-bottom: 20px; font-size: 1.3rem; display: flex; align-items: center; gap: 10px; }
+        
+        /* Table Scroll for Mobile */
+        .table-wrapper { overflow-x: auto; width: 100%; }
+        table { width: 100%; border-collapse: collapse; min-width: 300px; }
+        th { text-align: left; color: #64748b; font-size: 0.7rem; text-transform: uppercase; padding-bottom: 15px; }
+        td { padding: 12px 0; border-bottom: 1px solid var(--border); font-weight: 600; font-size: 0.95rem; }
+        
+        .rank { color: var(--accent); font-weight: 900; width: 45px; }
         .val { text-align: right; color: #2ed573; }
 
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
-    
-    /* This pushes the icon to the bottom corner */
-nav.sidebar {
-    display: flex;
-    flex-direction: column;
-}
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-.sidebar-footer {
-    margin-top: auto; /* This is the "magic" that pushes it to the bottom */
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start; /* Keeps it in the corner */
-}
+        /* --- MOBILE NAV --- */
+        .menu-btn { display: none; position: fixed; top: 15px; left: 15px; z-index: 1100; background: var(--accent); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; }
+        #overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 999; }
 
-.profile-link {
-    color: var(--text);
-    font-size: 1.8rem;
-    opacity: 0.3; /* Low opacity so it looks professional/not sus */
-    text-decoration: none;
-    transition: 0.3s;
-}
-
-.profile-link:hover {
-    opacity: 1;
-    color: var(--accent);
-}
-    
+        @media (max-width: 768px) {
+            nav.sidebar { transform: translateX(-100%); width: 280px; }
+            nav.sidebar.open { transform: translateX(0); }
+            main { margin-left: 0; }
+            .menu-btn { display: block; }
+            #overlay.active { display: block; }
+            .p-40 { padding: 25px; }
+            .champ-name { font-size: 2rem; }
+            #heroSection { padding-top: 100px; }
+        }
     </style>
 </head>
-<body>
+<body data-theme="dark">
 
-    <nav class="sidebar">
-    <div class="logo">FATBLOX57</div>
-    
-    <a href="index.html" class="nav-link">Home</a>
-    <a href="quiz.html" class="nav-link">Verification</a>
-    <a href="giveaway.html" class="nav-link">Giveaway</a>
-    <a href="spin.html" class="nav-link">Daily Spin</a>
-    <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+    <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+    <div id="overlay" onclick="toggleMenu()"></div>
 
-    <div class="sidebar-footer">
-        <a href="https://edupulses.github.io/EduPulses/about.html" class="profile-link">
-            <i class="fas fa-user-circle"></i>
-        </a>
-    </div>
-</nav>
+    <nav class="sidebar" id="sidebar">
+        <div class="logo">FATBLOX57</div>
+        
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="quiz.html" class="nav-link">Verification</a>
+        <a href="giveaway.html" class="nav-link">Giveaway</a>
+        <a href="spin.html" class="nav-link">Daily Spin</a>
+        <a href="leaderboard.html" class="nav-link active">Leaderboard</a>
+
+        <div class="sidebar-footer">
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <span id="themeIcon">🌙</span>
+            </button>
+            <a href="https://edupulses.github.io/EduPulses/about.html" class="profile-link">
+                <i class="fas fa-user-circle"></i>
+            </a>
+        </div>
+    </nav>
 
     <main>
         <section id="heroSection">
             <div class="crown"><i class="fas fa-crown"></i></div>
-            <p style="font-weight: 900; color: var(--accent); letter-spacing: 2px;">GLOBAL CHAMPION</p>
+            <p style="font-weight: 900; color: var(--accent); letter-spacing: 2px; font-size: 0.8rem;">GLOBAL CHAMPION</p>
             <div class="champ-name" id="topName">---</div>
-            <div id="topStats" style="opacity: 0.7; font-size: 1.1rem;">Loading Players...</div>
+            <div id="topStats" style="opacity: 0.7; font-size: 1rem; margin-top: 10px;">Loading Players...</div>
         </section>
 
         <div class="p-40">
             <div class="grid">
                 <div class="board-card">
                     <h2><i class="fas fa-sync-alt"></i> Spin Addicts</h2>
-                    <table id="spinTable">
-                        <thead><tr><th>Rank</th><th>Username</th><th class="val">Total Spins</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
+                    <div class="table-wrapper">
+                        <table id="spinTable">
+                            <thead><tr><th>Rank</th><th>Username</th><th class="val">Spins</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <div class="board-card">
                     <h2><i class="fas fa-graduation-cap"></i> Quiz Completion</h2>
-                    <table id="quizTable">
-                        <thead><tr><th>Rank</th><th>Username</th><th class="val">Status</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
+                    <div class="table-wrapper">
+                        <table id="quizTable">
+                            <thead><tr><th>Rank</th><th>Username</th><th class="val">Status</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
 
     <script>
-        // UPDATED WITH YOUR NEW URL
         const API = 'https://script.google.com/macros/s/AKfycbxUlLLwffQ1yADh_Fg3xLMNhvL4aSvQi43Qy1h9VKfgHDkDhVdAlwEFoMDmwNnIR7OdcA/exec';
 
-        async function load() {
+        // --- THEME & MENU LOGIC ---
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('active');
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const newTheme = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
+            document.getElementById('themeIcon').innerText = newTheme === 'dark' ? '🌙' : '☀️';
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // --- DATA FETCHING LOGIC (UNCHANGED) ---
+        async function loadData() {
             try {
                 const r = await fetch(API);
                 const data = await r.json();
                 
-                // 1. SPIN ANALYSIS (Group by Lowercase)
+                // 1. SPIN ANALYSIS
                 const spins = {};
                 data.filter(x => x.Type === "SPIN").forEach(x => {
                     const name = x.Username ? x.Username.toLowerCase().trim() : "unknown";
@@ -152,7 +187,7 @@ nav.sidebar {
                     quizTbody.innerHTML += `<tr><td class="rank">#${i+1}</td><td>${x.Username.toLowerCase()}</td><td class="val">COMPLETED</td></tr>`;
                 });
 
-                // 3. GLOBAL CHAMPION LOGIC
+                // 3. GLOBAL CHAMPION
                 if(sortedSpins.length > 0) {
                     document.getElementById('topName').innerText = sortedSpins[0][0];
                     document.getElementById('topStats').innerText = `Current Leader with ${sortedSpins[0][1]} Total Spins!`;
@@ -162,11 +197,19 @@ nav.sidebar {
 
             } catch (e) { 
                 console.error(e);
-                document.getElementById('topStats').innerText = "Sync Error: Check Google Deployment Settings"; 
+                document.getElementById('topStats').innerText = "Sync Error: Check API Connection"; 
             }
         }
 
-        window.onload = load;
+        window.onload = () => {
+            // Load saved theme
+            const saved = localStorage.getItem('theme') || 'dark';
+            document.body.setAttribute('data-theme', saved);
+            document.getElementById('themeIcon').innerText = saved === 'dark' ? '🌙' : '☀️';
+            
+            // Run original data load
+            loadData();
+        };
     </script>
 </body>
 </html>
