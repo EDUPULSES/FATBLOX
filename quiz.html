@@ -10,6 +10,7 @@
         :root {
             --bg: #05080f; --sidebar: #0b1224; --text: #ffffff;
             --accent: #00d4ff; --card: #111827; --border: #1f2937;
+            --gold: #fbbf24; --success: #10b981; --error: #ef4444; --purple: #a855f7;
         }
         [data-theme="light"] {
             --bg: #f3f4f6; --sidebar: #ffffff; --text: #111827;
@@ -22,18 +23,28 @@
         /* --- SIDEBAR --- */
         nav.sidebar { 
             width: 260px; background: var(--sidebar); height: 100vh; 
-            position: fixed; padding: 40px 20px; border-right: 1px solid var(--border);
+            position: fixed; left: 0; top: 0; padding: 40px 20px; border-right: 1px solid var(--border);
             z-index: 1000; display: flex; flex-direction: column;
         }
         .logo { font-size: 1.8rem; font-weight: 900; color: var(--accent); margin-bottom: 30px; letter-spacing: 1px; }
         .nav-link { 
             text-decoration: none; color: var(--text); padding: 12px 15px; 
-            margin-bottom: 8px; border-radius: 12px; display: flex; align-items: center; gap: 10px; font-weight: 600; opacity: 0.8;
+            margin-bottom: 8px; border-radius: 12px; display: flex; align-items: center; gap: 10px; font-weight: 600; opacity: 0.8; font-size: 1rem;
         }
         .nav-link:hover, .nav-link.active { background: var(--accent); color: white; opacity: 1; }
-        
-        .sidebar-footer { margin-top: auto; padding: 20px 0; display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--border); }
-        .theme-toggle { background: var(--border); border: none; padding: 10px; border-radius: 10px; color: var(--text); cursor: pointer; font-size: 1.2rem; flex: 1; }
+        .market-tab { border: 2px dashed var(--gold); color: var(--gold) !important; opacity: 1; margin-top: 10px; background: rgba(251, 191, 36, 0.05); }
+        .market-tab:hover { background: var(--gold) !important; color: #000 !important; border-style: solid; }
+
+        /* --- 4 CIRCLE ICONS --- */
+        .sidebar-footer { margin-top: auto; padding: 20px 0 0 0; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); }
+        .circle-btn { 
+            width: 45px; height: 45px; border-radius: 50%; background: var(--card); 
+            border: 1px solid var(--border); color: var(--text); display: flex; 
+            align-items: center; justify-content: center; font-size: 1.2rem; 
+            cursor: pointer; text-decoration: none; transition: 0.2s; 
+        }
+        .circle-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
+        .profile-circle { background: var(--accent); color: white; border-color: var(--accent); font-weight: 900; font-size: 1.4rem; }
 
         /* --- CONTENT --- */
         main { margin-left: 260px; padding: 40px; width: 100%; display: flex; justify-content: center; align-items: flex-start; }
@@ -49,13 +60,23 @@
             background: rgba(255,255,255,0.05); color: var(--text); font-size: 1rem; outline: none;
         }
         input:focus, select:focus { border-color: var(--accent); background: rgba(0,212,255,0.05); }
+        input:read-only { opacity: 0.6; cursor: not-allowed; }
 
         .submit-btn {
             width: 100%; background: var(--accent); color: white; border: none; 
             padding: 16px; border-radius: 12px; font-size: 1.1rem; font-weight: 900; 
-            cursor: pointer; text-transform: uppercase; margin-top: 10px;
+            cursor: pointer; text-transform: uppercase; margin-top: 10px; transition: 0.2s;
         }
         .submit-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        /* --- MODALS --- */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(3, 7, 18, 0.9); backdrop-filter: blur(5px); z-index: 6000; display: none; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+        .modal-card { background: var(--card); padding: 40px 30px; border-radius: 25px; border: 1px solid var(--accent); width: 100%; max-width: 400px; box-shadow: 0 15px 50px rgba(0,212,255,0.2); }
+        .modal-card h2 { color: var(--text); margin-bottom: 10px; font-size: 1.8rem; }
+        .modal-card p.subtitle { opacity: 0.6; margin-bottom: 25px; font-size: 0.95rem; }
+        .modal-card input { width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 12px; border: 1px solid var(--border); background: rgba(0,0,0,0.3); color: var(--text); text-align: center; font-size: 1rem; outline: none; }
+        .modal-card input:focus { border-color: var(--accent); }
+        .btn-buy { background: var(--accent); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 900; font-size: 1rem; cursor: pointer; text-transform: uppercase; width: 100%; transition: 0.2s; }
 
         /* --- MOBILE --- */
         .menu-btn { display: none; position: fixed; top: 15px; left: 15px; z-index: 1100; background: var(--accent); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; }
@@ -64,13 +85,33 @@
         @media (max-width: 768px) {
             nav.sidebar { transform: translateX(-100%); width: 280px; }
             nav.sidebar.open { transform: translateX(0); }
-            main { margin-left: 0; padding: 80px 20px; }
+            main { margin-left: 0; padding: 80px 20px 40px 20px; }
             .menu-btn { display: block; }
             #overlay.active { display: block; }
         }
     </style>
 </head>
 <body data-theme="dark">
+
+    <div id="customAlert" class="modal-overlay">
+        <div class="modal-card" style="max-width: 350px;">
+            <i id="alertIcon" class="fas fa-bell" style="font-size: 3rem; color: var(--accent); margin-bottom: 20px;"></i>
+            <h2 id="alertTitle" style="font-size: 1.5rem;">Notification</h2>
+            <p id="alertMessage" class="subtitle" style="margin-bottom: 25px;">Message goes here</p>
+            <button class="btn-buy" onclick="closeAlert()">GOT IT</button>
+        </div>
+    </div>
+
+    <div id="authModal" class="modal-overlay">
+        <div class="modal-card">
+            <h2 id="authTitle">Login</h2>
+            <p class="subtitle" id="authSubtitle">Secure your assets.</p>
+            <input type="text" id="authId" placeholder="Roblox Username">
+            <input type="password" id="authPass" placeholder="Password">
+            <button class="btn-buy" style="background: var(--purple); color: white;" onclick="submitAuth()" id="authSubmitBtn">ACCESS ACCOUNT</button>
+            <div style="margin-top: 20px; cursor: pointer; color: var(--text); opacity: 0.6; font-size: 0.9rem; font-weight: 600;" onclick="toggleAuthMode()" id="authToggleText">New player? Create an Account</div>
+        </div>
+    </div>
 
     <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
     <div id="overlay" onclick="toggleMenu()"></div>
@@ -82,15 +123,9 @@
         <a href="giveaway.html" class="nav-link">Giveaway</a>
         <a href="spin.html" class="nav-link">Daily Spin</a>
         <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+        <a href="market.html" class="nav-link market-tab"><i class="fas fa-shopping-cart"></i> Points Market</a>
 
-        <div class="sidebar-footer">
-            <button class="theme-toggle" onclick="toggleTheme()">
-                <span id="themeIcon">🌙</span>
-            </button>
-            <div style="opacity: 0.3; cursor: pointer; font-size: 1.8rem; padding: 10px;">
-                <i class="fas fa-user-circle"></i>
-            </div>
-        </div>
+        <div class="sidebar-footer" id="sidebarAuth"></div>
     </nav>
 
     <main>
@@ -104,7 +139,7 @@
             <form id="quizForm">
                 <div class="input-group">
                     <label>ROBLOX USERNAME</label>
-                    <input type="text" id="user" placeholder="Enter your username" required>
+                    <input type="text" id="user" placeholder="Login to autofill ID" required readonly onclick="if(!this.value) triggerLogin()">
                 </div>
 
                 <div class="input-group">
@@ -133,59 +168,162 @@
         </div>
     </main>
 
-    <script>
-        function toggleMenu() {
-            document.getElementById('sidebar').classList.toggle('open');
-            document.getElementById('overlay').classList.toggle('active');
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+        // Your Exact Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA0am45IuFAWXViWjnZiDPsddmbPUF3rZY",
+            authDomain: "fatblox-43609.firebaseapp.com",
+            projectId: "fatblox-43609",
+            storageBucket: "fatblox-43609.firebasestorage.app",
+            messagingSenderId: "104409498644",
+            appId: "1:104409498644:web:ca1d5ecd367ec0fcd85301",
+            databaseURL: "https://fatblox-43609-default-rtdb.firebaseio.com/" 
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        let state = { user: localStorage.getItem('rbx_id') };
+        let isLoginMode = true;
+
+        // --- CUSTOM ALERT UI ---
+        window.showCustomAlert = function(msg, title="Notification", isError=false) {
+            document.getElementById('alertTitle').innerText = title;
+            document.getElementById('alertMessage').innerText = msg;
+            let icon = document.getElementById('alertIcon');
+            icon.className = isError ? "fas fa-exclamation-circle" : "fas fa-check-circle";
+            icon.style.color = isError ? "var(--error)" : "var(--success)";
+            document.getElementById('customAlert').style.display = 'flex';
+        }
+        window.closeAlert = function() { document.getElementById('customAlert').style.display = 'none'; }
+
+        // --- AUTH LOGIC ---
+        window.triggerLogin = function() { document.getElementById('authModal').style.display = 'flex'; }
+        
+        window.toggleAuthMode = function() {
+            isLoginMode = !isLoginMode;
+            document.getElementById('authTitle').innerText = isLoginMode ? "Login" : "Create Account";
+            document.getElementById('authSubtitle').innerText = isLoginMode ? "Secure your assets." : "Join the economy.";
+            document.getElementById('authSubmitBtn').innerText = isLoginMode ? "ACCESS ACCOUNT" : "REGISTER NOW";
+            document.getElementById('authToggleText').innerText = isLoginMode ? "New player? Create an Account" : "Already registered? Login";
         }
 
-        function toggleTheme() {
+        window.submitAuth = async function() {
+            let id = document.getElementById('authId').value.trim().toLowerCase();
+            let pass = document.getElementById('authPass').value.trim();
+            if (id.length < 3 || pass.length < 3) return showCustomAlert("Username and Password must be at least 3 characters long.", "Error", true);
+
+            document.getElementById('authSubmitBtn').innerText = "Loading...";
+
+            try {
+                const dbRef = ref(db);
+                const snapshot = await get(child(dbRef, `users/${id}`));
+
+                if (isLoginMode) {
+                    if (snapshot.exists() && snapshot.val().password === pass) {
+                        localStorage.setItem('rbx_id', id); location.reload();
+                    } else { 
+                        showCustomAlert("Incorrect Username or Password!", "Error", true); 
+                        document.getElementById('authSubmitBtn').innerText = "ACCESS ACCOUNT";
+                    }
+                } else {
+                    if (snapshot.exists()) {
+                        showCustomAlert("Username is already registered! Switch to Login.", "Error", true);
+                        document.getElementById('authSubmitBtn').innerText = "REGISTER NOW";
+                        return;
+                    }
+                    await set(ref(db, `users/${id}`), { password: pass, coins: 0, inventory: {} });
+                    localStorage.setItem('rbx_id', id);
+                    alert("Account created successfully!");
+                    location.reload();
+                }
+            } catch(e) {
+                showCustomAlert("Database connection error.", "Error", true);
+                document.getElementById('authSubmitBtn').innerText = isLoginMode ? "ACCESS ACCOUNT" : "REGISTER NOW";
+            }
+        }
+
+        window.logout = function() { localStorage.removeItem('rbx_id'); location.reload(); }
+
+        // --- MENU & 4 CIRCLE THEME LOGIC ---
+        window.toggleMenu = function() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('overlay').classList.toggle('active'); }
+        window.toggleTheme = function() {
             const body = document.body;
             const newTheme = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-            body.setAttribute('data-theme', newTheme);
-            document.getElementById('themeIcon').innerText = newTheme === 'dark' ? '🌙' : '☀️';
-            localStorage.setItem('theme', newTheme);
+            body.setAttribute('data-theme', newTheme); localStorage.setItem('theme', newTheme);
+            syncUniversalAuth();
         }
+
+        window.syncUniversalAuth = function() {
+            const footer = document.getElementById('sidebarAuth');
+            
+            // 4 Circles Created Here
+            const themeIcon = document.body.getAttribute('data-theme') === 'dark' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+            const creatorBtn = `<a href="https://edupulses.github.io/EduPulses/about.html" target="_blank" class="circle-btn" title="Creator Info"><i class="fas fa-code"></i></a>`;
+            const altBtn = `<a href="alt.html" class="circle-btn" title="Spyraz Web Page"><i class="fas fa-globe"></i></a>`;
+            const themeBtn = `<button class="circle-btn" onclick="toggleTheme()" title="Toggle Theme">${themeIcon}</button>`;
+            
+            if (state.user) {
+                const initial = state.user.charAt(0).toUpperCase();
+                const profileBtn = `<button class="circle-btn profile-circle" title="Logged in as ${state.user}" onclick="logout()">${initial}</button>`;
+                footer.innerHTML = profileBtn + creatorBtn + altBtn + themeBtn;
+                document.getElementById('user').value = state.user;
+            } else {
+                const loginBtn = `<button class="circle-btn" style="background:var(--purple); color:white; border:none;" onclick="triggerLogin()" title="Login"><i class="fas fa-sign-in-alt"></i></button>`;
+                footer.innerHTML = loginBtn + creatorBtn + altBtn + themeBtn;
+                document.getElementById('user').value = "";
+            }
+        }
+
+        // --- FIREBASE SUBMISSION LOGIC ---
+        document.getElementById('quizForm').onsubmit = async function(e) {
+            e.preventDefault();
+            
+            if(!state.user) {
+                triggerLogin();
+                return;
+            }
+
+            const btn = document.getElementById('submitBtn');
+            btn.innerHTML = "Syncing to Cloud... ⏳";
+            btn.disabled = true;
+
+            const quizId = "QUIZ_" + Date.now();
+            const payload = {
+                username: state.user,
+                age: document.getElementById('age').value,
+                game: document.getElementById('game').value,
+                fruit: document.getElementById('fruit').value || "None",
+                timestamp: Date.now()
+            };
+
+            try {
+                // 1. Save to the Global Quizzes List for Admin Review
+                await set(ref(db, `global_quizzes/${quizId}`), payload);
+
+                // 2. Mark the user as "Verified" in their personal profile!
+                await set(ref(db, `users/${state.user}/verified`), true);
+
+                showCustomAlert("Verification Successful! Profile verified.", "Success");
+                document.getElementById('quizForm').reset();
+                document.getElementById('user').value = state.user; // Restore autofill
+
+            } catch(err) {
+                console.error(err);
+                showCustomAlert("Error connecting to Firebase. Try again.", "Error", true);
+            } finally {
+                btn.innerHTML = "VERIFY & SUBMIT";
+                btn.disabled = false;
+            }
+        };
 
         window.onload = () => {
             const saved = localStorage.getItem('theme') || 'dark';
             document.body.setAttribute('data-theme', saved);
-            document.getElementById('themeIcon').innerText = saved === 'dark' ? '🌙' : '☀️';
-        };
-
-        // --- SUBMISSION LOGIC ---
-        document.getElementById('quizForm').onsubmit = function(e) {
-            e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            btn.innerHTML = "Syncing... ⏳";
-            btn.disabled = true;
-
-            const data = { 
-                Type: "QUIZ",
-                Username: document.getElementById('user').value, 
-                Detail: "Age: " + document.getElementById('age').value + 
-                        " | Game: " + document.getElementById('game').value + 
-                        " | Fruit: " + (document.getElementById('fruit').value || "None")
-            };
-
-            fetch('https://script.google.com/macros/s/AKfycbxC5HR7w6TmgOhshQaiVarWD4Vi62AJRhfQYLal67bnWPBixIOo01agUTVha-g0As39eQ/exec', {
-                method: 'POST', 
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            })
-            .then(() => {
-                alert("Verification Successful! Data sent to cloud.");
-                this.reset();
-                btn.innerHTML = "VERIFY & SUBMIT";
-                btn.disabled = false;
-                window.location.href = "index.html";
-            })
-            .catch(() => {
-                alert("Error connecting. Please try again.");
-                btn.innerHTML = "VERIFY & SUBMIT";
-                btn.disabled = false;
-            });
+            syncUniversalAuth();
         };
     </script>
 </body>

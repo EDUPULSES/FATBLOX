@@ -10,6 +10,7 @@
         :root {
             --bg: #05080f; --sidebar: #0b1224; --text: #ffffff;
             --accent: #00d4ff; --card: #111827; --border: #1f2937;
+            --gold: #fbbf24; --purple: #a855f7;
         }
         [data-theme="light"] {
             --bg: #f3f4f6; --sidebar: #ffffff; --text: #111827;
@@ -31,10 +32,19 @@
             margin-bottom: 8px; border-radius: 12px; display: flex; align-items: center; gap: 10px; font-weight: 600; opacity: 0.8;
         }
         .nav-link:hover, .nav-link.active { background: var(--accent); color: white; opacity: 1; }
+        .market-tab { border: 2px dashed var(--gold); color: var(--gold) !important; opacity: 1; margin-top: 10px; background: rgba(251, 191, 36, 0.05); }
+        .market-tab:hover { background: var(--gold) !important; color: #000 !important; border-style: solid; }
         
-        .sidebar-footer { margin-top: auto; padding: 20px 0; display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--border); }
-        .theme-toggle { background: var(--border); border: none; padding: 10px; border-radius: 10px; color: var(--text); cursor: pointer; font-size: 1.2rem; flex: 1; }
-        .profile-link { color: var(--text); font-size: 1.8rem; opacity: 0.3; text-decoration: none; }
+        /* --- 4 CIRCLE ICONS --- */
+        .sidebar-footer { margin-top: auto; padding: 20px 0 0 0; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); }
+        .circle-btn { 
+            width: 45px; height: 45px; border-radius: 50%; background: var(--card); 
+            border: 1px solid var(--border); color: var(--text); display: flex; 
+            align-items: center; justify-content: center; font-size: 1.2rem; 
+            cursor: pointer; text-decoration: none; transition: 0.2s; 
+        }
+        .circle-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
+        .profile-circle { background: var(--accent); color: white; border-color: var(--accent); font-weight: 900; font-size: 1.4rem; }
 
         /* --- CONTENT --- */
         main { margin-left: 260px; width: 100%; }
@@ -42,28 +52,32 @@
         /* HERO SECTION */
         #heroSection {
             width: 100%; padding: 60px 20px;
-            background: linear-gradient(to bottom, rgba(0, 212, 255, 0.1), var(--bg));
+            background: linear-gradient(to bottom, rgba(251, 191, 36, 0.1), var(--bg));
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             border-bottom: 1px solid var(--border); text-align: center;
         }
-        .crown { font-size: 3.5rem; color: #ffd700; margin-bottom: 10px; animation: float 3s infinite ease-in-out; }
+        .crown { font-size: 3.5rem; color: var(--gold); margin-bottom: 10px; animation: float 3s infinite ease-in-out; }
         .champ-name { font-size: 2.5rem; font-weight: 900; text-transform: uppercase; color: var(--text); }
         
         /* TABLES & GRID */
         .p-40 { padding: 40px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
-        .board-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 25px; min-height: 400px; }
+        .board-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 25px; min-height: 400px; max-width: 800px; margin: 0 auto; }
         
-        h2 { color: var(--accent); margin-bottom: 20px; font-size: 1.3rem; display: flex; align-items: center; gap: 10px; }
+        h2 { color: var(--gold); margin-bottom: 20px; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
         
         /* Table Scroll for Mobile */
         .table-wrapper { overflow-x: auto; width: 100%; }
         table { width: 100%; border-collapse: collapse; min-width: 300px; }
-        th { text-align: left; color: #64748b; font-size: 0.7rem; text-transform: uppercase; padding-bottom: 15px; }
-        td { padding: 12px 0; border-bottom: 1px solid var(--border); font-weight: 600; font-size: 0.95rem; }
+        th { text-align: left; color: #64748b; font-size: 0.8rem; text-transform: uppercase; padding-bottom: 15px; }
+        td { padding: 15px 0; border-bottom: 1px solid var(--border); font-weight: 600; font-size: 1rem; }
         
-        .rank { color: var(--accent); font-weight: 900; width: 45px; }
-        .val { text-align: right; color: #2ed573; }
+        .rank { color: var(--accent); font-weight: 900; width: 60px; font-size: 1.1rem; }
+        .val { text-align: right; color: var(--gold); font-weight: 900; }
+
+        /* Top 3 Styling */
+        .rank-1 td { color: var(--gold); font-size: 1.2rem; }
+        .rank-2 td { color: #cbd5e1; font-size: 1.1rem; }
+        .rank-3 td { color: #b45309; font-size: 1.05rem; }
 
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
@@ -96,119 +110,165 @@
         <a href="giveaway.html" class="nav-link">Giveaway</a>
         <a href="spin.html" class="nav-link">Daily Spin</a>
         <a href="leaderboard.html" class="nav-link active">Leaderboard</a>
+        <a href="market.html" class="nav-link market-tab"><i class="fas fa-shopping-cart"></i> Points Market</a>
 
-        <div class="sidebar-footer">
-            <button class="theme-toggle" onclick="toggleTheme()">
-                <span id="themeIcon">🌙</span>
-            </button>
-            <a href="https://edupulses.github.io/EduPulses/about.html" class="profile-link">
-                <i class="fas fa-user-circle"></i>
-            </a>
+        <div class="sidebar-footer" id="sidebarAuth">
         </div>
     </nav>
 
     <main>
         <section id="heroSection">
             <div class="crown"><i class="fas fa-crown"></i></div>
-            <p style="font-weight: 900; color: var(--accent); letter-spacing: 2px; font-size: 0.8rem;">GLOBAL CHAMPION</p>
+            <p style="font-weight: 900; color: var(--gold); letter-spacing: 2px; font-size: 0.8rem;">RICHEST PLAYER</p>
             <div class="champ-name" id="topName">---</div>
-            <div id="topStats" style="opacity: 0.7; font-size: 1rem; margin-top: 10px;">Loading Players...</div>
+            <div id="topStats" style="opacity: 0.7; font-size: 1.2rem; margin-top: 10px; color: var(--gold); font-weight: 800;">Loading Players...</div>
         </section>
 
         <div class="p-40">
-            <div class="grid">
-                <div class="board-card">
-                    <h2><i class="fas fa-sync-alt"></i> Spin Addicts</h2>
-                    <div class="table-wrapper">
-                        <table id="spinTable">
-                            <thead><tr><th>Rank</th><th>Username</th><th class="val">Spins</th></tr></thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="board-card">
-                    <h2><i class="fas fa-graduation-cap"></i> Quiz Completion</h2>
-                    <div class="table-wrapper">
-                        <table id="quizTable">
-                            <thead><tr><th>Rank</th><th>Username</th><th class="val">Status</th></tr></thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
+            <div class="board-card">
+                <h2><i class="fas fa-coins"></i> Wealthiest Players</h2>
+                <p style="text-align: center; opacity: 0.6; margin-bottom: 25px; font-size: 0.9rem;">Ranking all registered players by their total Points.</p>
+                <div class="table-wrapper">
+                    <table id="coinTable">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Username</th>
+                                <th class="val">Total Points</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="3" style="text-align:center; opacity:0.5;"><i class="fas fa-spinner fa-spin"></i> Fetching Live Data from Firebase...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </main>
 
-    <script>
-        const API = 'https://script.google.com/macros/s/AKfycbxUlLLwffQ1yADh_Fg3xLMNhvL4aSvQi43Qy1h9VKfgHDkDhVdAlwEFoMDmwNnIR7OdcA/exec';
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
-        // --- THEME & MENU LOGIC ---
-        function toggleMenu() {
+        // Your Exact Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA0am45IuFAWXViWjnZiDPsddmbPUF3rZY",
+            authDomain: "fatblox-43609.firebaseapp.com",
+            projectId: "fatblox-43609",
+            storageBucket: "fatblox-43609.firebasestorage.app",
+            messagingSenderId: "104409498644",
+            appId: "1:104409498644:web:ca1d5ecd367ec0fcd85301",
+            databaseURL: "https://fatblox-43609-default-rtdb.firebaseio.com/" 
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // --- MOBILE MENU LOGIC ---
+        window.toggleMenu = function() {
             document.getElementById('sidebar').classList.toggle('open');
             document.getElementById('overlay').classList.toggle('active');
         }
 
-        function toggleTheme() {
+        // --- THEME & 4 CIRCLES LOGIC ---
+        window.toggleTheme = function() {
             const body = document.body;
             const newTheme = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-            body.setAttribute('data-theme', newTheme);
-            document.getElementById('themeIcon').innerText = newTheme === 'dark' ? '🌙' : '☀️';
-            localStorage.setItem('theme', newTheme);
+            body.setAttribute('data-theme', newTheme); 
+            localStorage.setItem('theme', newTheme); 
+            window.syncUniversalAuth(); 
         }
 
-        // --- DATA FETCHING LOGIC (UNCHANGED) ---
-        async function loadData() {
-            try {
-                const r = await fetch(API);
-                const data = await r.json();
-                
-                // 1. SPIN ANALYSIS
-                const spins = {};
-                data.filter(x => x.Type === "SPIN").forEach(x => {
-                    const name = x.Username ? x.Username.toLowerCase().trim() : "unknown";
-                    spins[name] = (spins[name] || 0) + 1;
-                });
-                
-                const sortedSpins = Object.entries(spins).sort((a,b) => b[1] - a[1]);
-                const spinTbody = document.querySelector('#spinTable tbody');
-                spinTbody.innerHTML = "";
-                
-                sortedSpins.forEach((u, i) => {
-                    spinTbody.innerHTML += `<tr><td class="rank">#${i+1}</td><td>${u[0]}</td><td class="val">${u[1]} Spins</td></tr>`;
-                });
+        window.syncUniversalAuth = function() {
+            let rawID = localStorage.getItem('rbx_id');
+            const footer = document.getElementById('sidebarAuth');
+            
+            const themeIcon = document.body.getAttribute('data-theme') === 'dark' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+            const creatorBtn = `<a href="https://edupulses.github.io/EduPulses/about.html" target="_blank" class="circle-btn" title="Creator Info"><i class="fas fa-code"></i></a>`;
+            const altBtn = `<a href="alt.html" class="circle-btn" title="Spyraz Web Page"><i class="fas fa-globe"></i></a>`;
+            const themeBtn = `<button class="circle-btn" onclick="toggleTheme()" title="Toggle Theme">${themeIcon}</button>`;
 
-                // 2. QUIZ ANALYSIS
-                const quizEntries = data.filter(x => x.Type === "QUIZ" || x.Type === "VERIFICATION");
-                const quizTbody = document.querySelector('#quizTable tbody');
-                quizTbody.innerHTML = "";
-                
-                quizEntries.forEach((x, i) => {
-                    quizTbody.innerHTML += `<tr><td class="rank">#${i+1}</td><td>${x.Username.toLowerCase()}</td><td class="val">COMPLETED</td></tr>`;
-                });
-
-                // 3. GLOBAL CHAMPION
-                if(sortedSpins.length > 0) {
-                    document.getElementById('topName').innerText = sortedSpins[0][0];
-                    document.getElementById('topStats').innerText = `Current Leader with ${sortedSpins[0][1]} Total Spins!`;
-                } else {
-                    document.getElementById('topStats').innerText = "No data recorded yet.";
-                }
-
-            } catch (e) { 
-                console.error(e);
-                document.getElementById('topStats').innerText = "Sync Error: Check API Connection"; 
+            if (rawID) {
+                const cleanID = rawID.toLowerCase().trim();
+                const initial = cleanID.charAt(0).toUpperCase();
+                const profileBtn = `<button class="circle-btn profile-circle" title="Logged in as: ${cleanID}">${initial}</button>`;
+                footer.innerHTML = profileBtn + creatorBtn + altBtn + themeBtn;
+            } else {
+                const loginBtn = `<button class="circle-btn" style="background:var(--purple); color:white; border-color:var(--purple);" onclick="alert('Head to the Points Market tab to login!')" title="Login"><i class="fas fa-sign-in-alt"></i></button>`;
+                footer.innerHTML = loginBtn + creatorBtn + altBtn + themeBtn;
             }
         }
 
+        // --- FETCH FIREBASE LEADERBOARD DATA ---
+        window.loadLeaderboard = async function() {
+            try {
+                const tbody = document.querySelector('#coinTable tbody');
+                document.getElementById('topStats').innerText = `Scanning global network... ⏳`;
+
+                const dbRef = ref(db);
+                // Fetch ALL users at once, instantly.
+                const snapshot = await get(child(dbRef, `users`));
+                
+                if (!snapshot.exists()) {
+                    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; opacity:0.5;">No registered players found yet.</td></tr>`;
+                    document.getElementById('topStats').innerText = "No players registered.";
+                    return;
+                }
+
+                const usersData = snapshot.val();
+                let validUsers = [];
+                
+                // Extract every user and their coins
+                for (let username in usersData) {
+                    let coins = usersData[username].coins || 0;
+                    validUsers.push({ Username: username, Coins: coins });
+                }
+
+                // Sort them from Richest to Poorest
+                validUsers.sort((a, b) => b.Coins - a.Coins);
+
+                tbody.innerHTML = "";
+
+                if (validUsers.length === 0) {
+                     tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; opacity:0.5;">No valid players found.</td></tr>`;
+                     return;
+                }
+
+                // Populate the Table
+                validUsers.forEach((user, index) => {
+                    const rankClass = index === 0 ? 'rank-1' : (index === 1 ? 'rank-2' : (index === 2 ? 'rank-3' : ''));
+                    const rankIcon = index === 0 ? '🏆' : (index === 1 ? '🥈' : (index === 2 ? '🥉' : `#${index + 1}`));
+                    const coinsFormatted = user.Coins.toLocaleString();
+
+                    tbody.innerHTML += `
+                        <tr class="${rankClass}">
+                            <td class="rank">${rankIcon}</td>
+                            <td>${user.Username.toUpperCase()}</td>
+                            <td class="val"><i class="fas fa-coins"></i> ${coinsFormatted}</td>
+                        </tr>
+                    `;
+                });
+
+                // Update the Hero Header with the #1 Player
+                if (validUsers.length > 0) {
+                    document.getElementById('topName').innerText = validUsers[0].Username.toUpperCase();
+                    document.getElementById('topStats').innerText = `💰 ${validUsers[0].Coins.toLocaleString()} Total Points!`;
+                }
+
+            } catch (e) { 
+                console.error("Error fetching data:", e);
+                document.getElementById('topStats').innerText = "Sync Error: Check Firebase Connection"; 
+                document.querySelector('#coinTable tbody').innerHTML = `<tr><td colspan="3" style="text-align:center; color:var(--error);">Failed to load leaderboard data.</td></tr>`;
+            }
+        }
+
+        // --- INITIALIZE ON LOAD ---
         window.onload = () => {
-            // Load saved theme
             const saved = localStorage.getItem('theme') || 'dark';
             document.body.setAttribute('data-theme', saved);
-            document.getElementById('themeIcon').innerText = saved === 'dark' ? '🌙' : '☀️';
             
-            // Run original data load
-            loadData();
+            window.syncUniversalAuth();
+            window.loadLeaderboard();
         };
     </script>
 </body>
